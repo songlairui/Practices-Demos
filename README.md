@@ -10,3 +10,10 @@
 2: 来源：网站A、网站B、...、Self
 
 3: 执行网址
+
+###2016年10月26日11:03:32         [HTML Touch 事件](/Exercises/js/touch/touch.html)
+- 元素添加touch listen
+    - touch变量 状态日志
+- 滑动事件改变数值
+- 滑动到指定区域检测
+- 多触点参数日志

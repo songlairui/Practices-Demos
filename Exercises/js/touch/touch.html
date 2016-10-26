@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Touch Event</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <style>
+        .tip,.state{position:fixed;}
+        .state{left:0;top:20%;}
+        html,body{height:100%}
+        body{min-height:200px;position:relative}
+        .scrollroll{z-index:1;position: absolute;right:0;top:0;bottom:0;width:22px;background:linear-gradient(red,blue)}
+        .line{
+            overflow: hidden;border:1px solid orangered}
+        .line div{float:left;
+            min-height:20px;
+            min-width:2em;}
+        .line .btn{
+            cursor: s-resize;
+            position: relative;
+            width:64px;height: 64px;
+            text-align: center;
+            line-height:64px;
+            margin:5px;
+            font-size:2em;
+            font-weight:700;
+            color:yellow;
+            background: #fff;
+            -webkit-clip-path:polygon(50% 0%, 83% 12%, 100% 43%, 94% 78%, 68% 100%, 32% 100%, 6% 78%, 0% 43%, 17% 12%);
+        }
+        .line .btn2,.line .btn4{margin:32px -10px 0 -10px}
+        .btn::before{
+            content:'';
+            position:absolute;top:0;right:0;bottom:0;left:0;
+            z-index: -1;
+            background:deepskyblue;
+            -webkit-clip-path:polygon(50% 0%, 83% 12%, 100% 43%, 94% 78%, 68% 100%, 32% 100%, 6% 78%, 0% 43%, 17% 12%);
+        }
+        .tip::before{position:absolute;content:'';width:48px;height:48px;left:50px;top:250px;background:rgba(244,24,24,.5);border-radius:50%;}
+    </style>
+</head>
+<body>
+
+<div class="state" id="inp"></div>
+<div class="tip">
+    <p>手指点到任何一个元素，在提示元素上开始显示数据。随着手指移动，数据跟随监视。</p>
+</div>
+<div class="container">
+    <div class="line">
+        <div class="title">当前行</div>
+        <div class="btn btn1">1</div>
+        <div class="btn btn2">2</div>
+        <div class="btn btn3">3</div>
+        <div class="btn btn4">4</div>
+        <div class="act">更多操作</div>
+    </div>
+</div>
+<div id='handler' class="scrollroll"></div>
+
+<script>
+    (function(){
+        var handler=document.getElementById("handler");
+        handler.addEventListener('touchstart',touch,false);
+        handler.addEventListener('touchmove',touch,false);
+        handler.addEventListener('touchend',touch,false);
+        function touch (event){
+            var event = event || window.event;
+            var oInp = document.getElementById("inp");
+
+            var vXoff=this.offsetLeft;
+            var vYoff=this.offsetTop;
+            switch(event.type){
+                case "touchstart":
+                    var vX=Math.floor(event.touches[0].clientX);
+                    var vY=Math.floor(event.touches[0].clientY);
+                    oInp.innerHTML ="Touch at (" + (vX+vXoff) +"," + (vY+vYoff) +")";
+                    break;
+                case "touchend":
+                    oInp.innerHTML +="<br/>Touch <i>end</i> (" + Math.floor(event.changedTouches[0].clientX) +"," + Math.floor(event.changedTouches[0].clientY) +")";
+                    break;
+                case "touchmove":
+                    var vX=Math.floor(event.touches[0].clientX);
+                    var vY=Math.floor(event.touches[0].clientY);
+                    event.preventDefault();
+                    oInp.innerHTML ="<br/>Touch <b>moved</b> (" + (vX+vXoff) +"," + (vY+vYoff) +")";
+                        var D=Math.pow((Math.pow((vX+vXoff-400),2)+Math.pow((vY+vYoff-260),2)),0.5);
+                        if(D<30){
+                            oInp.innerHTML+='在区域之内';
+                        }else{
+                            oInp.innerHTML+='D:'+Math.floor(D);
+                        }
+                        if(event.touches[1]){
+                            oInp.innerHTML+=';第二触点：'+Math.floor(event.touches[1].clientX);
+                        }
+                    break;
+            }
+        }
+        var nhandler = document.getElementsByClassName('btn');
+        var initY=false;
+        var initVal=false;
+        for(var i=0;i<nhandler.length;i++){
+            addTouchE(nhandler[i]);
+        }
+        function addTouchE(obj) {
+            obj.addEventListener('touchstart',touchdebug,false);
+            obj.addEventListener('touchmove',touchdebug,false);
+            obj.addEventListener('touchend',touchdebug,false);
+        }
+        function array2string(array){
+            return arr.reduce(function (x, y) {
+                return x + '|'+ Math.ceil(y.clientX)+'-'+ Math.ceil(y.clientY)+'|';
+            },'0');
+        }
+        function touchdebug(event){
+            var event = event||window.event;
+            var oInp = document.getElementById("inp");
+            switch (event.type){
+                case "touchstart":
+                    initY=Math.floor(event.touches[0].clientY);
+                    initVal=+this.innerHTML;
+                    oInp.innerHTML ="s (" + initY +")";
+                    break;
+                case "touchend":
+                        oInp.innerHTML ="<i>e</i> (" + array2string(event.changedTouches) +")";
+                    break;
+                case "touchmove":
+                    event.preventDefault();
+                    if(initY){
+                        var distance=Math.floor(event.touches[0].clientY-initY);
+                        //oInp.innerHTML+="<br/><i>m</i> ==>"+Math.floor(event.touches[0].clientY);
+                        oInp.innerHTML="<br><i>距离</i> ==>"+distance;
+                        this.innerHTML=initVal+Math.floor(distance/20);
+                    }else {
+                        oInp.innerHTML = "<b>m</b> (" + array2string(event.touches) + ")";
+                    }
+                    break;
+            }
+        }
+        function touchi (event){
+            var event = event || window.event;
+            var oInp = this;
+            var oInp = document.getElementById("inp");
+            switch(event.type){
+                case "touchstart":
+                    oInp.innerHTML ="s (" + event.touches[0].clientX +"," + event.touches[0].clientY +")";
+                    break;
+                case "touchend":
+                    oInp.innerHTML ="<i>e</i> (" + event.changedTouches[0].clientX +"," + event.changedTouches[0].client +")";
+                    break;
+                case "touchmove":
+                    event.preventDefault();
+                    oInp.innerHTML ="<b>m</b> (" + event.touches[0].clientX +"," + event.touches[0].clientY +")";
+                    break;
+            }
+        }
+    })();
+</script>
+</body>
+</html>
