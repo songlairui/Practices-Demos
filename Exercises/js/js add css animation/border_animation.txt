@@ -1,0 +1,33 @@
+
+		// 动态添加动画， 为piece创建边框动画。
+		var target=document.getElementsByClassName('borderB')[0];
+		var stylesheets=document.styleSheets;
+		var sheet;
+		if(stylesheets){
+			sheet = stylesheets[stylesheets.length-1];
+		}else{
+			var style = document.createElement('style');
+			style.type='text/css';
+			style.innerHTML='body {}';
+			document.head.appendChild(style);
+			sheet = document.styleSheets[0];
+		}
+		var height=~~window.getComputedStyle(target,':before').height.replace('px','');
+		var width=~~window.getComputedStyle(target,':before').width.replace('px','');
+		var bandwidth=2;
+		this.stylesheet = document.styleSheets[document.styleSheets.length-1];
+		var rule='' +
+				'@keyframes clip4r{' +
+				'0%,100%{clip:rect(0,'+width+'px,'+bandwidth+'px,0)} ' +
+				'25%{clip:rect(0,'+bandwidth+'px,'+height+'px,0)} ' +
+				'50%{clip:rect('+(height-bandwidth)+'px,'+width+'px,'+height+'px,0)} ' +
+				'75%{clip:rect(0,'+width+'px,'+height+'px,'+(width-bandwidth)+'px)} ' +
+				'}';
+/*		target.innerHTML+=window.getComputedStyle(target,':before').height;*/
+		try {
+			sheet.insertRule(rule,sheet.rules.length);
+			rule='.borderB::after,.borderB::before{animation:clip4r 2s linear infinite;}';
+			sheet.insertRule(rule,sheet.rules.length);
+			rule='.borderB::after{animation-delay:-1s;}';
+			sheet.insertRule(rule,sheet.rules.length);
+		}catch(e){};
