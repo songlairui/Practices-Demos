@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas - Larry 练习</title>
+</head>
+<body>
+<div class="tip"></div>
+<canvas id="myCanvas">您的浏览器不支持Canvas</canvas>
+
+<script>
+
+    (function(){
+        document.getElementsByClassName('tip')[0].innerHTML='Here is Canvas Practice';
+        var canvas = document.getElementById('myCanvas');
+        canvas.width=600;
+        canvas.height=480;
+        var context = canvas.getContext('2d');
+        context.fillStyle='red';
+        context.beginPath();
+        context.arc(400,250,30,0,2*Math.PI,true);
+        context.closePath();
+        context.fill();
+        setInterval(function () {
+            run(context);
+        },20);
+
+        var speed=0;
+        var startPoint=200;
+        function run(cxt) {
+            speed=-7;
+            cxt.clearRect(0,183,600,480);
+            startPoint+=speed;
+            if(startPoint<0){
+                startPoint+=640;
+            }
+            cxt.beginPath();
+            cxt.arc(startPoint,200,30,0,2*Math.PI,true);
+            cxt.closePath()
+            cxt.fill();
+
+        }
+    })();
+</script>
+</body>
+</html>
