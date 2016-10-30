@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <style>
+        .actarea{background: deepskyblue;width: auto;
+            min-height:6em;}
+    </style>
+</head>
+<body>
+<div class="actarea" id="target">
+
+</div>
+<div class="dashboard">
+    <div class="chart hori">
+<canvas id="hori"></canvas>
+    </div>
+    <div class="chart vert">
+<canvas id="vert"></canvas>
+    </div>
+    <div class="params">
+<pre>
+当前Touch 开始时间戳：<span id="timeStart">---</span>;
+— —Touch 当前时间戳：<span id="timeMove">---</span>;
+当前Touch 结束时间戳：<span id="timeEnd">---</span>;
+</pre>
+    </div>
+</div>
+<script>
+    (function(){
+        var d=new Date();
+        var caseMe = {
+            target:
+                 document.getElementById('target'),
+            indicator:
+                function(id){
+                  return document.getElementById(id);
+                },
+            load:function(){
+                console.group('执行一个对象');
+                console.log('执行加载');
+                this.target.addEventListener('touchstart',this.touchEv,false);
+                this.target.addEventListener('touchmove',this.touchEv,false);
+                this.target.addEventListener('touchend',this.touchEv,false);
+                console.groupEnd();
+            },
+            unload:function () {
+
+            },
+            touchEv:function (event) {
+                console.info('触摸事件');
+                var event = event||window.event;
+
+                switch (event.type) {
+                    case "touchstart":
+                            this.indicator('timeStart').innerHTML=d.getTime();
+                        break;
+                    case "touchend":
+                            this.indicator('timeEnd').innerHTML=d.getTime();
+                            this.indicator('timeMove').innerHTML='--';
+                        break;
+                    case "touchmove":
+                        event.preventDefault();
+                            this.indicator('timeMove').innerHTML=d.getTime();
+                        break;
+                    default:
+                        return null;
+                }
+            }
+
+    };
+        caseMe.load();
+    })();
+</script>
+</body>
+</html>

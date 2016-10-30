@@ -128,9 +128,11 @@
                     event.preventDefault();
                     if(initY){
                         var distance=Math.floor(event.touches[0].clientY-initY);
+                        var disMod=distance%20;
                         //oInp.innerHTML+="<br/><i>m</i> ==>"+Math.floor(event.touches[0].clientY);
                         oInp.innerHTML="<br><i>距离</i> ==>"+distance;
                         this.innerHTML=initVal+Math.floor(distance/20);
+                        this.style.top='-'+disMod+'px';
                     }else {
                         oInp.innerHTML = "<b>m</b> (" + array2string(event.touches) + ")";
                     }
@@ -146,7 +148,7 @@
                     oInp.innerHTML ="s (" + event.touches[0].clientX +"," + event.touches[0].clientY +")";
                     break;
                 case "touchend":
-                    oInp.innerHTML ="<i>e</i> (" + event.changedTouches[0].clientX +"," + event.changedTouches[0].client +")";
+                    oInp.innerHTML ="<i>e</i> (" + event.changedTouches[0].clientX +"," + event.changedTouches[0].clientY +")";
                     break;
                 case "touchmove":
                     event.preventDefault();
