@@ -17,3 +17,8 @@
 - 滑动事件改变数值
 - 滑动到指定区域检测
 - 多触点参数日志
+- touch 左滑手势识别【待完成】
+
+###2016年10月30日14:16:30      [Canvas 动画](/Exercises/js/canvas-ani/canvas.html)
+- canvas 绘图
+- canvas js动态绘图
