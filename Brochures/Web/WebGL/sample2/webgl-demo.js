@@ -37,7 +37,7 @@ function start() {
 
     // Set up to draw the scene periodically.
 
-    setInterval(drawScene, 15);
+    setInterval(drawScene, 105);
   }
 }
 
@@ -102,7 +102,7 @@ function initBuffers() {
 //
 // Draw the scene.
 //
-function drawScene() {
+function drawScene(axe) {
   // Clear the canvas before we start drawing on it.
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -121,8 +121,9 @@ function drawScene() {
 
   // Now move the drawing position a bit to where we want to start
   // drawing the square.
-
-  mvTranslate([-0.0, 0.0, -6.0]);
+  axe=Math.ceil(Math.random()*100-70)/10;
+  a=Math.ceil(Math.random()*100-30)/10;;
+  mvTranslate([axe, a, -6.0]);
 
   // Draw the square by binding the array buffer to the square's vertices
   // array, setting attributes, and pushing it to GL.
