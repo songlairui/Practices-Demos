@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>App Items from Lightning Launcher</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <style>
+        body{box-sizing: border-box;}
+        #items,#layout{overflow: hidden;width: 45%;min-width: 480px;float: left;border:1px solid maroon}
+        .app{float:left;width: 90px;height: 90px;font-size: 14px;text-align: center}
+        .app img{width:48px;height: 48px;display: block;margin:5px auto 8px;}
+    </style>
+</head>
+<body>
+<div id="items"></div>
+<div id="layout">
+    <div class="appcol">
+        <div class="header">
+            <div class="title">我的应用</div>
+            <div class="xiudao" title="秀刀">层次App位置</div>
+        </div>
+        <div class="content">
+            <div class="app"><img src="" alt="" width="48">应用名</div>
+        </div>
+        <div class="inform">
+            <right>活跃程度</right>
+        </div>
+        <div id="term"></div>
+    </div>
+</div>
+<script>
+    //异步加载json配置
+
+    window.onload=function () {
+        var pool = document.getElementById('items');
+        var term = document.getElementById('term');
+        var items;
+        function get(url){
+            return new Promise(function(resolve){
+                var xhr = new XMLHttpRequest();
+                xhr.onload=function () {
+                    resolve(this.responseText);
+                };
+                xhr.open("get",url);
+                xhr.send();
+            });
+        }
+        Promise.all([get('items.json')]).then(function (sources) {
+            eval("items="+sources[0]);
+            //console.log(JSON.stringify(items));
+            term.innerHTML=JSON.stringify(items);
+            for(var i=0;i<items['i'].length;i++){
+                //console.log(items['i'][i].b);
+                var tmpdom = document.createElement('div');
+                tmpdom.className='app';
+                tmpdom.setAttribute('draggable','true');
+                var tmpicon = document.createElement('img');
+                tmpicon.src="icon/"+items['i'][i].b+'.png';
+                tmpicon.title=items['i'][i].am;
+                var tmptext = document.createTextNode(items['i'][i].am);
+                tmpdom.appendChild(tmpicon);
+                tmpdom.appendChild(tmptext);
+                pool.appendChild(tmpdom);
+            };
+
+        });
+
+    };
+</script>
+</body>
+</html>
