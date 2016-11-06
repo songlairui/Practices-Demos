@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Screen Params</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <style>
+        body{min-height: 800px;}
+        #mark{position: fixed;left:40%;top:30%;background: rgba(245,34,23,.4);width: 48px;
+            height:48px;}
+    </style>
+</head>
+<body onload="LoadParams()">
+<h2>屏幕尺寸参数</h2>
+<p>我在1080p手机上看到过一次宽度360的显示，要弄清楚这是怎么回事，并且能够一直记得。</p>
+<p>顺便，我想起来这个跟高分屏的注意事项有关系</p>
+<ul>
+    <li>闭包函数记录次数</li>
+    <li>js 函数节流</li>
+    <li>手势识别</li>
+    <li>基于时间的数据记录</li>
+    <li>Canvas 2d绘图</li>
+</ul>
+<pre id="showStage">
+<b>Mouse</b> <span>...</span>
+    event.clientX  :<span data-ev="clientX">xxx</span>  //鼠标相对于页面文档的位置
+    event.clientY  :<span data-ev="clientY">xxx</span>
+    event.offsetX  :<span data-ev="offsetX">xxx</span>  //鼠标当前在一个DOM的上方，相对于这个DOM的位置
+    event.offsetY  :<span data-ev="offsetY">xxx</span>
+<b>Touch</b>
+    touch.clientX  :<span id="touchX">xxx</span>
+    touch.client  :<span id="touchY">xxx</span>
+<b>window</b>
+    screen.width     : <span data-eval="window.screen.width">xxx</span>        //屏幕的尺寸
+    screen.height    : <span data-eval="window.screen.height">xxx</span>
+    screen.availWidth     : <span data-eval="window.screen.availWidth">xxx</span>   //屏幕可用尺寸，即，窗口最大化可占据的尺寸
+    screen.availHeight    : <span data-eval="window.screen.availHeight">xxx</span>
+    screen.pixelDepth     : <span data-eval="window.screen.pixelDepth">xxx</span>   //色深
+    screenTop       : <span data-eval="window.screenTop">xxx</span>         //窗口在屏幕中的位置
+    screenLeft      : <span data-eval="window.screenLeft">xxx</span>
+
+<b>body</b>
+    clientWidth      : <span data-eval="document.body.clientWidth">xxx</span>
+    clientHeight      : <span data-eval="document.body.clientHeight">xxx</span>
+    offsetWidth         : <span data-eval="document.body.offsetWidth">xxx</span>
+    offsetHeight      : <span data-eval="document.body.offsetHeight">xxx</span>
+    scrollWidth      : <span data-eval="document.body.scrollWidth">xxx</span>
+    scrollHeight      : <span data-eval="document.body.scrollHeight">xxx</span>
+    scrollTop      : <span data-eval="document.body.scrollTop">xxx</span>
+    scrollLeft      : <span data-eval="document.body.scrollLeft">xxx</span>
+
+<b>Element:</b>
+    scrollWidth      : <span data-eval="mark.scrollWidth">xxx</span>
+    scrollHeight      : <span data-eval="mark.scrollHeight">xxx</span>
+    scrollLeft      : <span data-eval="mark.scrollLeft">xxx</span>
+    scrollTop      : <span data-eval="mark.scrollTop">xxx</span>
+    offsetHeight      : <span data-eval="mark.offsetHeight">xxx</span>
+    offsetWidth      : <span data-eval="mark.offsetWidth">xxx</span>
+    offsetLeft      : <span data-eval="mark.offsetLeft">xxx</span>
+    offsetTop      : <span data-eval="mark.offsetTop">xxx</span>
+</pre>
+<div id="mark"></div>
+<script>
+
+    var x,targets,pool,mark;
+    function LoadParams(){
+        mark = document.getElementById('mark');
+        pool = document.getElementById('showStage');
+        targets=pool.getElementsByTagName('span');
+
+        // 用来赋值的函数
+        function fillVal(){
+            for (var i=0;i<targets.length;i++){
+                if (!targets[i].hasAttribute('data-eval')) continue;
+                //console.log(targets[i].getAttributeNode('data-eval'));
+                targets[i].innerHTML= eval(targets[i].getAttributeNode('data-eval').value);
+            }
+        }
+        function mouseVal(){
+            for (var i=0;i<targets.length;i++){
+                if (!targets[i].hasAttribute('data-ev')) continue;
+                //console.log(targets[i].getAttributeNode('data-eval'));
+                targets[i].innerHTML= eval('event.'+targets[i].getAttributeNode('data-ev').value);
+            }
+        }
+
+        function touchVal(event){
+            var event = event||window.event;
+            switch (event.type){
+                case "touchstart":
+                    break;
+                case "touchend":
+                    break;
+                case "touchmove":
+                    event.preventDefault();
+                    targetX.innerHTML=Math.floor(event.touches[0].clientX);
+                    targetY.innerHTML=Math.floor(event.touches[0].clientY);
+                    break;
+                default:
+                    return null;
+            }
+        }
+        function addTouchEvent(obj,Fn){
+            obj.addEventListener('touchstart',Fn,false);
+            obj.addEventListener('touchmove',Fn,false);
+            obj.addEventListener('touchend',Fn,false);
+        }
+
+        var count = function(fn,desc){
+            var time=0;
+            desc=desc||0;
+            return function(){
+                time+=1;
+                fn(desc,time);
+            }
+        };
+        function setval(type,val){
+            targets[0].innerHTML=type+' '+val;
+            fillVal();
+        }
+        //节流
+        var throttle = function(fn,delay){
+            var _self = fn,
+                    timer = null
+                    firstTime = true;
+            return function(){
+                var args = arguments,
+                        _this = this,
+                        delay = delay||500;
+                if (firstTime){
+                    _self.apply(_this,args);
+                    firstTime = false;
+                }
+                if (timer){
+                    return false;
+                }
+                timer=setTimeout(function(){
+                    clearTimeout(timer);timer=null;
+                    _self.apply(_this,args);
+                },delay);
+            };
+        }
+// 实施函数
+
+        var targetX = document.getElementById('touchX');
+        var targetY = document.getElementById('touchY');
+        addTouchEvent(mark,touchVal);
+
+        window.onresize=throttle(function () {
+            count(setval,'resize');
+        },200);
+        var f1=count(setval,'scroll');
+        window.onscroll=throttle(function () {
+            //f1(); 可以记录次数，是同一个闭包
+            count(setval,'scroll')();
+        },200);
+        var f=count(setval,'mousemove-throttle');
+        window.onmousemove=throttle(function(ev){
+            mouseVal();
+        },200);
+    }
+</script>
+</body>
+</html>
