@@ -15,7 +15,7 @@
     uniform mat4 uProjectionMatrix;
     varying vec4 vColor;
 
-    void main()
+    void main(void)
     {
         gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aVertexPosition, 1.0);
         vColor = vec4(aVertexColor, 1.0);
@@ -25,7 +25,8 @@
     precision highp float;
     varying vec4 vColor;
 
-    void main(){
+    void main(void){
+
         gl_FragColor = vColor;
     }
 </script>
@@ -44,6 +45,11 @@
         var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
         gl.shaderSource(fragmentShader,fragmentSource);
         gl.compileShader(fragmentShader);
+        // 增加一个判错提示，只使用片段着色器
+        if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+            alert("An error occurred compiling the shaders: " + gl.getShaderInfoLog(fragmentShader));
+            return null;
+        }
         //链接 着色器
         var program = gl.createProgram();
         gl.attachShader(program,vertexShader);
@@ -102,11 +108,15 @@
         gl.enableVertexAttribArray(aVertexColor);
         */
         var aVertexPosition = gl.getAttribLocation(program, "aVertexPosition");
-        gl.vertexAttribPointer(aVertexPosition, 3, gl.FLOAT, false, 24, 0);
         gl.enableVertexAttribArray(aVertexPosition);
         var aVertexColor = gl.getAttribLocation(program, "aVertexColor");
-        gl.vertexAttribPointer(aVertexColor, 3, gl.FLOAT, false, 24, 12);
         gl.enableVertexAttribArray(aVertexColor);
+
+
+        var SBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, SBuffer);
+        gl.vertexAttribPointer(aVertexPosition, 3, gl.FLOAT, false, 24, 0);
+        gl.vertexAttribPointer(aVertexColor, 3, gl.FLOAT, false, 24, 12);
         // 三角形绘制次序
         var indices=[
             0, 1, 2, 0, 2, 3,
