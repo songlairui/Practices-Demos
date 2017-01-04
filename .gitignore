@@ -38,3 +38,6 @@ jspm_packages
 
 # IDEs
 .idea
+
+# nuxt npm
+.nuxt

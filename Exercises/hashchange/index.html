@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+	<meta charset="UTF-8">
+	<title>HashChange 事件</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="theme-color" content="#248">
+	<meta http-equiv="Cache-Control" content="no-siteapp">
+	<link rel="shortcut icon" sizes="192x192" href="./icon.png">
+	<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+	<div id="toast">...</div>
+	<script>
+		var hashContent = window.location.hash
+
+		var monitor = document.getElementById('toast')
+		monitor.innerHTML = "execute here <br>"
+		window.onload = function () {
+			if ("onhashchange" in window) {
+			    monitor.innerHTML += "该浏览器支持hashchange事件!<br>"
+			}
+		}
+		window.onhashchange = function () {
+			    monitor.innerHTML += hashContent + "发生了hashchange事件!" + window.location.hash + "<br>"
+		}
+	</script>
+</body>
+</html>

@@ -3,10 +3,15 @@
 联系足够了，各种Demo也应该在这儿。
 这儿所有的东西将成为最终进行实施的源
 
+# npm init
+准备使用构建工具，gulp或yeoman，
+设置当前启用的文件夹，然后serve it
+使用构建工具，能够使用less、es6
+
 # 文件夹部署
 
 1: Practices 练习、Demos 演示
-1.1: 事件记录：url--> 
+1.1: 事件记录：url-->
 2: 来源：网站A、网站B、...、Self
 
 3: 执行网址
@@ -22,3 +27,8 @@
 ###2016年10月30日14:16:30      [Canvas 动画](/Exercises/js/canvas-ani/canvas.html)
 - canvas 绘图
 - canvas js动态绘图
+
+###2017年1月4日14点33分        [京东金融PC端签到背景动画](/Exercises/style/jd_jr_daily)
+- css3 rotate
+- css3 rotate3d
+- [MDN 文档](https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-function/rotate3d)
