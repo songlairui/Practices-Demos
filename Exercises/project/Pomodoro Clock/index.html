@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="pomodoro.css">
+</head>
+<body>
+<div class="clock">
+    <div class="header">
+        <h1>PomoDoro </h1></h1>
+        <p>Pure Js version By <i>Larry</i></p>
+    </div>
+    <div class="control">
+        <div class="col break">
+            <div class="tip">BREAK LENGTH</div>
+            <div class="val-break">{{}}</div>
+            <span class="minus">-</span>
+            <span class="plus">+</span>
+        </div>
+        <div class="col session">
+            <div class="tip">SESSION LENGTH</div>
+            <div class="val-session">{{}}</div>
+            <span class="minus">-</span>
+            <span class="plus">+</span>
+        </div>
+    </div>
+    <div class="clockview">
+        <div id="status"></div>
+        <div id="progress"></div>
+    </div>
+    <div class="console">
+<pre>
+当前状态： Break | Session
+当前剩余时间： 0~
+Break 时长：
+Session 时长：
+重置的场景：
+    1. 正在倒计时
+DOM操作：
+    实时
+</pre>
+    </div>
+</div>
+<script src="pomo.js"></script>
+</body>
+</html>

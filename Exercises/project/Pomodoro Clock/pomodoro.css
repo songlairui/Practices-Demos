@@ -1,0 +1,35 @@
+html,body{box-sizing: border-box}
+body{color:#eee;
+    background: darkslategray;}
+.clock{
+    max-width: 640px;
+    margin:0 auto;
+}
+/*辅助线*/
+.header,.clock,.control,div[class^='val-']{
+   /* border:1px dotted red;*/
+}
+
+/*分栏*/
+.control{overflow: hidden;position: relative}
+.col{float:left;width: 50%;}
+.control .tip,.control div[class^='val-']{text-align: center}
+.control .tip{font-size: .6em;}
+.control div[class^='val-']{height: 2.5em;
+    line-height:2.5em;}
+.control .col{position: relative}
+.control .col span{
+    position: absolute;
+    left:0;top:1em;
+    width:2em;
+    text-align: center;
+    background: rgba(255,255,255,.5);
+    margin:0 13%;
+    display: block;
+    height: 2em;
+    line-height: 2em;
+    cursor: pointer;
+}
+.control .col span.plus{
+    left:auto;
+    right:0;}
