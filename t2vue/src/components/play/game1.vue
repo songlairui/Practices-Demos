@@ -6,6 +6,7 @@
           <el-button type="primary" @click="ChooseFlip">{{ current.first === 0?'':'重新' }}选择执棋</el-button>
           <el-button type="primary" @click="setCurrentChess()">click</el-button>
           <el-button type="primary" @click="clearScene()">清空局面</el-button>
+          <el-button type="primary" @click="randomDrop()">随机下一个棋子</el-button>
         </el-col>
       </el-row>
       <el-row>
@@ -16,11 +17,6 @@
       <el-row>
         <el-col :span="20">
           当前 : <i :class='current.chess | tunedisplay'></i>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="20">
-          {{ snap[1] }}
         </el-col>
       </el-row>
     </el-col>
@@ -49,6 +45,10 @@ export default {
       current: {
         first: 0,
         chess: 0
+      },
+      lib: {
+        '1': 'X',
+        '-1': '-'
       }
     }
   },
@@ -65,7 +65,7 @@ export default {
         return p
       }, [])
     },
-    lines () {
+    linedatas () {
       let hlines = []
       let vlines = []
       let xlines = [[], []]
@@ -91,7 +91,7 @@ export default {
       // 值得标记的状态： 不可能到3（unique 到 2），可能到3（未放棋子，未放全棋子），已经到3
       // fall, waiting, ok
       let indicator = null
-      let possibleines = this.lines.map(function (arr) {
+      let possibleines = this.linedatas.map(function (arr) {
         arr = arr.filter((v) => v !== 0)
         let tmpArr = arr.filter((v, i, a) => a.indexOf(v) === i)
         if (tmpArr.length > 1) {
@@ -117,14 +117,29 @@ export default {
     }
   },
   methods: {
+    randomDrop () {
+      let availableIndex = this.snap.map((v, i) => (v === 0) ? i : -1).filter(v => v !== -1)
+      // console.log(availableIndex)
+      // console.log(availableIndex.length)
+      let randomIndex = Math.floor(Math.random() * (availableIndex.length))
+      // console.log(randomIndex)
+      // console.log(availableIndex[randomIndex])
+      this.drop(availableIndex[randomIndex])
+    },
     calcResult () {
       // 根据数组 possibleines 判断是否结束
       // 需要判断 已有胜出、平局
-      if (this.possibleines.filter((v) => v === 'ok').length > 0) {
-        return 'ok'
-      }
-      if (this.possibleines.filter((v) => v !== 'fall').length === 0) {
-        return 'out'
+      if (this.linestatus.indicator !== null) {
+        // this.end()
+        this.$alert(`${this.lib[this.linestatus.indicator]} 方已获胜`, '完', {
+          confirmButtonText: 'OK',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: `action: ${action}`
+            })
+          }
+        })
       }
     },
     clearScene () {
@@ -145,11 +160,19 @@ export default {
       }
     },
     drop (index) {
+      if (this.linestatus.indicator !== null) {
+        this.$message({
+          type: 'warning',
+          message: '请重新开局'
+        })
+        return
+      }
       console.log(index)
       if (!this.CheckInit()) { return }
       if (this.snap[index] === 0) {
         this.snap.splice(index, 1, this.current.chess)
         this.setCurrentChess()
+        this.calcResult()
       } else {
         console.log('已有棋子')
       }
