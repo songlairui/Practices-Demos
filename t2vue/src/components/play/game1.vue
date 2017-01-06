@@ -49,14 +49,15 @@
         <li>需要重新开局时，重新开局按钮的变化，添加动态效果</li>
         <li>增加下棋步骤</li>
       </ul>
+      <hr>
+      <h3>TO FIX</h3>
+      <ul>
+        <li>判断逻辑</li>
+        <li>平局状态</li>
+      </ul>
     </el-col>
   </el-row>
 </template>
-<style>
-.grid-content{
-  margin:.5em;
-}
-</style>
 <script>
 export default {
   created () {
@@ -97,12 +98,12 @@ export default {
         hlines.push(this.snap2d[i])
         for (let j = 0; j < 3; j++) {
           if (!Array.isArray(vlines[i])) {
-            console.log(`vlines[${i}] is not array`)
+            // console.log(`vlines[${i}] is not array`)
             vlines[i] = []
           }
           vlines[i].push(this.snap2d[j][i])
         }
-        console.log(xlines)
+        // console.log(xlines)
         xlines[0].push(this.snap2d[i][i])
         xlines[1].push(this.snap2d[2 - i][i])
       }
@@ -129,6 +130,9 @@ export default {
           }
         }
       })
+      if(possibleines.filter(v => v !== 'fall').length === 0) {
+        indicator = 'none'
+      }
       return { indicator, possibleines }
     }
   },
@@ -158,7 +162,13 @@ export default {
       // 需要判断 已有胜出、平局
       if (this.linestatus.indicator !== null) {
         // this.end()
-        this.$alert(`${this.lib[this.linestatus.indicator]} 方已获胜`, '完', {
+        let msg = ''
+        if (this.linestatus.indicator === 'none') {
+          msg = '平局'
+        } else {
+          msg = `${this.lib[this.linestatus.indicator]} 方已获胜`
+        }
+        this.$alert(msg, '完', {
           confirmButtonText: 'OK',
           callback: action => {
             this.$message({
@@ -189,6 +199,15 @@ export default {
       }
     },
     drop (index, identity) {
+      // 先， 如果棋盘结束，不能落子
+      if (this.linestatus.indicator !== null) {
+        this.$message({
+          type: 'warning',
+          message: '请重新开局'
+        })
+        return
+      }
+      // 判断robot状态，避免不该某一方落子时，触发操作
       if (identity === 'robot') {
         if (this.current.chess === this.current.user) {
           // 是 robot， 当前下的棋子，与user执棋一致， 不可以下棋。
@@ -207,13 +226,6 @@ export default {
           })
           return
         }
-      }
-      if (this.linestatus.indicator !== null) {
-        this.$message({
-          type: 'warning',
-          message: '请重新开局'
-        })
-        return
       }
       console.log(index)
       if (!this.CheckInit()) { return }
@@ -246,14 +258,14 @@ export default {
           message: '已选 O '
         })
       }).then(() => {
-        console.log(userchess)
+        // console.log(userchess)
         this.current.user = userchess
         this.current.first = firstchess
         this.setCurrentChess(firstchess)
       })
     },
     setCurrentChess (set = null) {
-      console.log(this.current.chess)
+      // console.log(this.current.chess)
       if (!set) {
         // 没有参数传入，
         if (this.current.first === 0) {
@@ -298,5 +310,8 @@ export default {
   margin: 10px ;
   font-size: 56px;
   cursor: pointer;
+}
+.grid-content{
+  margin:.5em;
 }
 </style>
