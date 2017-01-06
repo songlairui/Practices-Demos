@@ -1,39 +1,62 @@
 <template lang="html">
   <el-row>
-    <el-col :span='16' :offset='6'>
-      <el-row>
-        <el-col :span="20">
-          <el-button type="primary" @click="ChooseFlip">{{ current.first === 0?'':'重新' }}选择执棋</el-button>
-          <el-button type="primary" @click="setCurrentChess()">click</el-button>
-          <el-button type="primary" @click="clearScene()">清空局面</el-button>
-          <el-button type="primary" @click="randomDrop()">随机下一个棋子</el-button>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="20">
-          先手 : <i :class='current.first | tunedisplay'></i>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="20">
-          当前 : <i :class='current.chess | tunedisplay'></i>
-        </el-col>
-      </el-row>
-    </el-col>
-    <el-col :span='21' :offset='1'>
+    <el-col :span='20' :offset='2'>
       <div class="state">
         <el-row :gutter='0'>
           <el-col :span='8' v-for='(chess, index) in snap'>
             <div class="cell" @click="drop(index)">
-              <i :class='chess | tunedisplay'></i>
+              <i v-if='chess !== 0' :class='chess | tunedisplay'></i>
             </div>
           </el-col>
         </el-row>
       </div>
     </el-col>
+    <el-col :span='10' :offset='0'>
+      <el-row>
+        <el-col :span="20">
+          <div class="grid-content">
+            <el-button type="primary" @click="ChooseFlip">{{ current.first === 0?'':'重新' }}选择执棋</el-button><br>
+            <el-button type="primary" @click="clearScene()">重新开局</el-button><br>
+            <el-button type="primary" @click="randomDrop()">随机下一个棋子</el-button><br>
+            先手 : <i :class='current.first | tunedisplay'></i> <br>
+            选手 : <i :class='current.user | tunedisplay'></i> <br>
+            当前 : <i :class='current.chess | tunedisplay'></i><br>
+            Robot: 随机下棋 LEVEL
+          </div>
+        </el-col>
+      </el-row>
+    </el-col>
+    <el-col :span='10' :offset='1'>
+      <h3>README</h3>
+      <p>
+        ＃字游戏，已完成：
+      </p>
+      <ul>
+        <li>Js Array 操纵，生成二维数组</li>
+        <li>变量与棋盘数据绑定</li>
+        <li>计算已获胜状态</li>
+        <li>重新开局</li>
+        <li>无脑的Robot</li>
+      </ul>
+      <hr>
+      <h3>TODO</h3>
+      <ul>
+        <li>基于Canvas的辅助线</li>
+        <li>Robot的下棋策略</li>
+        <li>样式打磨</li>
+        <li>转换到Codepen.io上</li>
+        <li>重新选择棋子按钮的状态变化</li>
+        <li>需要重新开局时，重新开局按钮的变化，添加动态效果</li>
+        <li>增加下棋步骤</li>
+      </ul>
+    </el-col>
   </el-row>
 </template>
-
+<style>
+.grid-content{
+  margin:.5em;
+}
+</style>
 <script>
 export default {
   created () {
@@ -44,7 +67,8 @@ export default {
       snap: new Array(9).fill(0),
       current: {
         first: 0,
-        chess: 0
+        chess: 0,
+        user: 0
       },
       lib: {
         '1': 'X',
@@ -117,6 +141,9 @@ export default {
     }
   },
   methods: {
+    automatic () {
+      // 先手 是 X，每次计算当前，如果current 不是user的棋子，则自动下一个。
+    },
     randomDrop () {
       let availableIndex = this.snap.map((v, i) => (v === 0) ? i : -1).filter(v => v !== -1)
       // console.log(availableIndex)
@@ -124,7 +151,7 @@ export default {
       let randomIndex = Math.floor(Math.random() * (availableIndex.length))
       // console.log(randomIndex)
       // console.log(availableIndex[randomIndex])
-      this.drop(availableIndex[randomIndex])
+      this.drop(availableIndex[randomIndex], 'robot')
     },
     calcResult () {
       // 根据数组 possibleines 判断是否结束
@@ -147,9 +174,11 @@ export default {
       this.snap.splice(0, 9, ...(new Array(9).fill(0)))
       this.current.first = 0
       this.current.chess = 0
+      this.current.user = 0
+      this.ChooseFlip()
     },
     CheckInit () {
-      if (this.current.first === 0) {
+      if (this.current.user === 0) {
         this.$message({
           type: 'error',
           message: '未选择执棋'
@@ -159,7 +188,26 @@ export default {
         return true
       }
     },
-    drop (index) {
+    drop (index, identity) {
+      if (identity === 'robot') {
+        if (this.current.chess === this.current.user) {
+          // 是 robot， 当前下的棋子，与user执棋一致， 不可以下棋。
+          this.$message({
+            type: 'error',
+            message: '出现了一个焦躁的robot'
+          })
+          return
+        }
+      } else {
+        if (this.current.chess !== this.current.user) {
+          // 不是 robot， 当前下的棋子，与user执棋不一致， 不可以下棋。
+          this.$message({
+            type: 'warning',
+            message: '请等待robot落子'
+          })
+          return
+        }
+      }
       if (this.linestatus.indicator !== null) {
         this.$message({
           type: 'warning',
@@ -179,25 +227,27 @@ export default {
     },
     ChooseFlip () {
       // var _this = this
-      let firstchess = null
+      let firstchess = 1
+      let userchess = null
       this.$confirm(' X or O ?', '选择棋子', {
         confirmButtonText: 'X',
         cancelButtonText: 'O',
         type: 'info'
       }).then(() => {
-        firstchess = 1
+        userchess = 1
         this.$message({
           type: 'success',
           message: '已选 X'
         })
       }, () => {
-        firstchess = -1
+        userchess = -1
         this.$message({
           type: 'success',
           message: '已选 O '
         })
       }).then(() => {
-        console.log(firstchess)
+        console.log(userchess)
+        this.current.user = userchess
         this.current.first = firstchess
         this.setCurrentChess(firstchess)
       })
@@ -219,6 +269,13 @@ export default {
         // 则 翻转
       } else {
         this.current.chess = set
+      }
+      // 当棋局没有结束时， 判断一下robot 是否下棋
+      if (this.linestatus.indicator === null && this.current.chess !== this.current.user) {
+        setTimeout(
+          this.randomDrop
+          , Math.random() * 1000 + 300
+        )
       }
     }
   }
