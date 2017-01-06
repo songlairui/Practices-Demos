@@ -1,23 +1,6 @@
 <template lang="html">
   <el-row>
-    <el-col :span='4' :offset='0'>
-      <el-row>
-        <el-col :span="20">
-          <el-button type="primary" @click="ChooseFlip">{{ current.first === 0?'':'重新' }}选择执棋</el-button>
-          <el-button type="primary" @click="clearScene()">重新开局</el-button>
-          <el-button type="primary" @click="randomDrop()">随机下一个棋子</el-button>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="20">
-          先手 : <i :class='current.first | tunedisplay'></i> <br>
-          选手 : <i :class='current.user | tunedisplay'></i> <br>
-          当前 : <i :class='current.chess | tunedisplay'></i><br>
-          Robot: 随机下棋 LEVEL
-        </el-col>
-      </el-row>
-    </el-col>
-    <el-col :span='20' :offset='0'>
+    <el-col :span='20' :offset='2'>
       <div class="state">
         <el-row :gutter='0'>
           <el-col :span='8' v-for='(chess, index) in snap'>
@@ -28,9 +11,52 @@
         </el-row>
       </div>
     </el-col>
+    <el-col :span='10' :offset='0'>
+      <el-row>
+        <el-col :span="20">
+          <div class="grid-content">
+            <el-button type="primary" @click="ChooseFlip">{{ current.first === 0?'':'重新' }}选择执棋</el-button><br>
+            <el-button type="primary" @click="clearScene()">重新开局</el-button><br>
+            <el-button type="primary" @click="randomDrop()">随机下一个棋子</el-button><br>
+            先手 : <i :class='current.first | tunedisplay'></i> <br>
+            选手 : <i :class='current.user | tunedisplay'></i> <br>
+            当前 : <i :class='current.chess | tunedisplay'></i><br>
+            Robot: 随机下棋 LEVEL
+          </div>
+        </el-col>
+      </el-row>
+    </el-col>
+    <el-col :span='10' :offset='1'>
+      <h3>README</h3>
+      <p>
+        ＃字游戏，已完成：
+      </p>
+      <ul>
+        <li>Js Array 操纵，生成二维数组</li>
+        <li>变量与棋盘数据绑定</li>
+        <li>计算已获胜状态</li>
+        <li>重新开局</li>
+        <li>无脑的Robot</li>
+      </ul>
+      <hr>
+      <h3>TODO</h3>
+      <ul>
+        <li>基于Canvas的辅助线</li>
+        <li>Robot的下棋策略</li>
+        <li>样式打磨</li>
+        <li>转换到Codepen.io上</li>
+        <li>重新选择棋子按钮的状态变化</li>
+        <li>需要重新开局时，重新开局按钮的变化，添加动态效果</li>
+        <li>增加下棋步骤</li>
+      </ul>
+    </el-col>
   </el-row>
 </template>
-
+<style>
+.grid-content{
+  margin:.5em;
+}
+</style>
 <script>
 export default {
   created () {
@@ -244,10 +270,11 @@ export default {
       } else {
         this.current.chess = set
       }
-      if (this.current.chess !== this.current.user) {
+      // 当棋局没有结束时， 判断一下robot 是否下棋
+      if (this.linestatus.indicator === null && this.current.chess !== this.current.user) {
         setTimeout(
           this.randomDrop
-          , 2000
+          , Math.random() * 1000 + 300
         )
       }
     }
