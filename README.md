@@ -8,6 +8,9 @@
 设置当前启用的文件夹，然后serve it
 使用构建工具，能够使用less、es6
 
+# Trans into Vue-project
+Folder: t2vue
+
 # 文件夹部署
 
 1: Practices 练习、Demos 演示
