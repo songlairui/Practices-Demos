@@ -4,13 +4,13 @@ const Foo = { template: '<div>foo</div>' }
 const Home = { template: '<div>bar</div>' }
 
 import Launcher from './components/content/launcher'
-import Game1 from './components/play/game1'
+// import Game1 from
 
 const routes = [
   { path: '/', component: Home },
   { path: '/foo', component: Foo },
   { path: '/content/android/launcher', component: Launcher },
-  { path: '/play/game1', component: Game1 }
+  { path: '/play/game1', component: resolve => require(['./components/play/game1'], resolve) }
 ]
 
 export const router = new VueRouter({
