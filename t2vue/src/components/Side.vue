@@ -12,7 +12,7 @@
         <el-menu-item index="/content/launcher">选项1</el-menu-item>
       </el-submenu>
       <el-menu-item-group title="Project">
-        <el-menu-item index="1-3">选项3</el-menu-item>
+        <el-menu-item index="/content/bidlist1">列表显示</el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group title="StyleSheets">
         <el-menu-item index="1-3-1">选项3</el-menu-item>
@@ -33,7 +33,7 @@
 export default {
   data () {
     return {
-      testArray: ['1', '1-4']
+      testArray: []
     }
   },
   methods: {

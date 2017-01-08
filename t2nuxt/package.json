@@ -1,0 +1,17 @@
+{
+  "name": "lary_demo_nuxt",
+  "version": "1.0.0",
+  "description": "lary's playground with nuxt",
+  "author": "songlairui <cnre@live.cn>",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.15.3",
+    "nuxt": "latest"
+  },
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  }
+}
