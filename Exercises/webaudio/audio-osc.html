@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>web Audio osc</title>
+</head>
+<body>
+  <p>使用生成器生成音频</p>
+  <button onclick="play()">播放</button>
+  <button class="mute" data-muted="ture">Unmute</button>
+<script>
+  var AudioContext = window.AudioContext || window.webkitAudioContext;
+  var audioCtx = new AudioContext();
+
+  // create Oscillator and gain node
+  var oscillator = audioCtx.createOscillator();
+  var gainNode = audioCtx.createGain();
+
+  // connect oscillator to gain node to speakers
+
+  oscillator.connect(gainNode);
+  // gainNode.connect(audioCtx.destination);
+
+  var maxFreq = 6000;
+  var maxVol = 0.02;
+
+  var initialFreq = 3000;
+  var initialVol = 0.001;
+
+  oscillator.detune.value = 100; // value in cents
+  oscillator.start(0);
+
+  oscillator.onended = function() {
+    console.log('Your tone has now stopped playing!');
+  }
+
+  gainNode.gain.value = initialVol;
+  oscillator.frequency.value = .6 * maxFreq;
+  gainNode.gain.value = .6 * maxVol;
+
+  // mute button
+
+  var mute = document.querySelector('.mute');
+
+  mute.onclick = function() {
+    if(mute.getAttribute('data-muted') === 'false') {
+      gainNode.disconnect(audioCtx.destination);
+      mute.setAttribute('data-muted', 'true');
+      mute.innerHTML = "Unmute";
+    } else {
+      gainNode.connect(audioCtx.destination);
+      mute.setAttribute('data-muted', 'false');
+      mute.innerHTML = "Mute";
+    };
+  }
+
+
+  setTimeout(function(){
+    gainNode.disconnect(audioCtx.destination);
+    mute.setAttribute('data-muted', 'true');
+    mute.innerHTML = "Unmute";
+  },0)
+
+  function play(){
+    // 播放动作，即播放一段之间，然后静音
+    if (mute.getAttribute('data-muted') === 'false') {
+      gainNode.disconnect(audioCtx.destination);
+      mute.setAttribute('data-muted', 'true');
+      mute.innerHTML = "Unmute";
+    }
+    setTimeout(function(){
+      gainNode.connect(audioCtx.destination);
+      mute.setAttribute('data-muted', 'false');
+      mute.innerHTML = "Mute";
+    },1)
+    setTimeout(function(){
+      gainNode.disconnect(audioCtx.destination);
+      mute.setAttribute('data-muted', 'true');
+      mute.innerHTML = "Unmute";
+    },1000)
+  }
+</script>
+</body>
+</html>

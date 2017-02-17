@@ -35,3 +35,7 @@ Folder: t2vue
 - css3 rotate
 - css3 rotate3d
 - [MDN 文档](https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform-function/rotate3d)
+
+###2017年2月14日10点30分       [WebAudio - FCC Simon Game](/Brochures/Web/WebAudio/simon.html)
+- createOscillator [MDN](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createOscillator)
+- audioContext

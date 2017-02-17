@@ -5,7 +5,7 @@
         <transition-group name="list" tag="div">
           <div class='info' v-for='item in pagedata.result' v-bind:key='item.id'>
             <span class="meta">
-        {{ item.createdate.date }}月{{ item.createdate.day }}日 {{ item.createdate.hours }}时{{ item.createdate.minutes }}分
+        {{ item.createdate.year }}月{{ item.createdate.date }}日 {{ item.createdate.hours }}时{{ item.createdate.minutes }}分
             </span>
             <span class="content">
               {{ item.title }}

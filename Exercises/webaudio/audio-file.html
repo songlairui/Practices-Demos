@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>web Audio</title>
+</head>
+<body>
+  <p>使用xhr 以arrayBuffer方式获取音频源，然后播放</p>
+  <button onclick="play()">Play</button>
+  <script>
+  // 前缀兼容
+  ['','webkit','moz','ms'].forEach(function (pre) {
+      var prefix = pre + 'AudioContext';
+      if ( !window.AudioContext && window[prefix] ) {
+          window.AudioContext = window[prefix];
+      }
+  });
+  // 请求音频文件
+function fetchAudioSource (url, successCallback) {
+    if ( url && typeof url === 'string' ) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        // 以二进制缓冲的方式存储音频文件数据
+        request.responseType = 'arraybuffer';
+        request.onload = function() {
+            successCallback(request.response);
+        }
+        request.send();
+    }
+}
+
+function decodeAudio (audioCtx, audioData, callback) {
+    if ( audioData ) {
+        audioCtx.decodeAudioData(
+            audioData,
+            // on success
+            function (buffer) {
+                callback && callback(buffer);
+            },
+            // on fail
+            function(e) {
+                console.log('Fail to decode the file!');
+            }
+        )
+    }
+}
+function play(){
+  if ( AudioContext ) {
+      fetchAudioSource('./toast.mp3', function (re) {
+          // 创建音频上下文对象
+          var audioCtx = new AudioContext();
+          // 创建音源节点
+          var sourceNode = audioCtx.createBufferSource();
+          // 加一个增益节点，用于控制音量
+          var gainNode = audioCtx.createGain();
+          // 设置音量大小，默认值为1 - 无增益或衰减
+          gainNode.gain.value = 0.8;
+          // 解码
+          decodeAudio(audioCtx, re, function (sourceBuffer) {
+              sourceNode.buffer = sourceBuffer;
+          });
+          // 连接各节点
+          // source node -> gain node -> destination node
+          sourceNode.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+          // 播放
+          sourceNode.start()
+          // (sourceNode.start || sourceNode.noteOn)(0);
+      });
+  }
+}
+
+  </script>
+</body>
+</html>
