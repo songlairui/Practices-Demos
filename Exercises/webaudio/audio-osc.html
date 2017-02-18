@@ -7,13 +7,17 @@
   <title>web Audio osc</title>
 </head>
 <body>
-  <p>使用生成器生成音频</p>
-  <button onclick="play()">播放</button>
+  <h2>使用生成器生成音频</h2>
+  <pre>
+    <button onclick="play()">播放</button>
+    <button onclick="playSequence()">按数组中频率播放声音</button>
+    
+  </pre>
   <button class="mute" data-muted="ture">Unmute</button>
 <script>
   var AudioContext = window.AudioContext || window.webkitAudioContext;
   var audioCtx = new AudioContext();
-
+  var frequencies = [329.63,261.63,220,164.81];
   // create Oscillator and gain node
   var oscillator = audioCtx.createOscillator();
   var gainNode = audioCtx.createGain();
@@ -37,8 +41,8 @@
   }
 
   gainNode.gain.value = initialVol;
-  oscillator.frequency.value = .6 * maxFreq;
-  gainNode.gain.value = .6 * maxVol;
+  oscillator.frequency.value = 1 * maxFreq;
+  gainNode.gain.value = 1 * maxVol;
 
   // mute button
 
@@ -80,6 +84,10 @@
       mute.setAttribute('data-muted', 'true');
       mute.innerHTML = "Unmute";
     },1000)
+  }
+
+  function playSequence () {
+    
   }
 </script>
 </body>

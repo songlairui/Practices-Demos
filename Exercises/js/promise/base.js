@@ -43,3 +43,6 @@ var p22 = p2.then(p4('p2 中 p4 的 传入参数'))
 var p32 = p3.then(p4('p32 中 p4 的 传入参数'))
 
 var p5 = p32.then(function(){console.log('p5', msg)})
+
+// p32 对p32 添加了 then， p5 对p32添加了then，运行时中，promise 链执行一次。
+// 一个看起来像promise环节执行了两次，说明牠们在两个promise 链上。

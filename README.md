@@ -39,3 +39,8 @@ Folder: t2vue
 ###2017年2月14日10点30分       [WebAudio - FCC Simon Game](/Brochures/Web/WebAudio/simon.html)
 - createOscillator [MDN](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createOscillator)
 - audioContext
+
+###2017年2月18日10点30分       Promise 例子更新
+- promise 形式
+- promise sequence
+- promise 闭包？

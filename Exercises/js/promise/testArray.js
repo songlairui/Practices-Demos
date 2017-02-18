@@ -110,5 +110,3 @@ function rR(fre,r){
 function actBit (x) {
 
 }
-
-// promise 的执行，使用函数返回一个pomise 执行
