@@ -120,6 +120,9 @@ frequencies.forEach(function (val) {
 frequencies.forEach(function (val) {
   sequence2 = sequence2.then(tickFactoryFakeToOK(val))
 })
+frequencies.forEach(function (val) {
+  sequence2 = sequence2.then(tickFactory(val))
+})
 
 // 我觉得使用一层箭头函数能让可读性增加？！[黑人问好]
   // 使用箭头函数简化，假的Factory函数 才需要简化
