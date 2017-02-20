@@ -102,7 +102,7 @@ function rR(fre,r){
   }
 }
 // 执行最终函数
-// outputArray(frequencies)
+ outputArray(frequencies)
 
 // 执行基本动作一个，对于有时间持续的时间，使用promise进行处理
 // promise 处理的时候，需要传入一个参数，在最终回调的时候，处理该参数
