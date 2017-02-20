@@ -4,7 +4,7 @@
 // 方法一 ： 传给then的是一个function，将会正确处理。
 // .then(function aa(){})  在没有参数的时候等价于 .then(aa)
 // 即 var aa = function(){}
-// aa === function(){return aa()}
+// aa 等价于 function(){return aa()}
 //
 // 当有参数的时候，转化为匿名函数
 // .then(function aa(){})
