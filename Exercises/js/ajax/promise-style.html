@@ -23,7 +23,6 @@
 
 </div>
     <script>
-
         var res = null;
         (function(){
             function get(url){
@@ -36,11 +35,10 @@
                     xhr.send();
                 });
             }
-            Promise.all([get("../../../assets/conf/static.txt")]).then(function (sources) {
+            Promise.all([get("./static.txt")]).then(function (sources) {
                 var result = sources[0];
                 console.log("result:"+result);
                 document.getElementById('result').innerHTML=result;
-
             });
         })();
     </script>

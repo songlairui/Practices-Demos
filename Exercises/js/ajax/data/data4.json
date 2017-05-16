@@ -1,0 +1,21 @@
+{
+  "items": [
+    {
+      "url": "./img/group4.jpg"
+    },
+    {
+      "url": "./img/group4.jpg"
+    },
+    {
+      "url": "./img/group4.jpg"
+    },
+    {
+      "url": "./img/group4.jpg"
+    },
+    {
+      "url": "./img/group4.jpg"
+    }
+  ],
+  "currentPage": 4,
+  "pageTotal": 5
+}

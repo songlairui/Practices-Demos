@@ -1,0 +1,15 @@
+{
+  "items": [
+    {
+      "url": "./img/group2.jpg"
+    },
+    {
+      "url": "./img/group2.jpg"
+    },
+    {
+      "url": "./img/group2.jpg"
+    }
+  ],
+  "currentPage": 2,
+  "pageTotal": 5
+}
