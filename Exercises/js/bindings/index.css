@@ -1,0 +1,12 @@
+#app{
+  display:flex;
+}
+.left,.right{
+  flex:1;
+  min-height:100px;
+  background:#f3f4f5
+}
+
+.right{
+  background:#f6f5f3
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>双向绑定</title>
+  <link rel="stylesheet" href="index.css">
+  <script src="main.js"></script>
+</head>
+<body>
+<div id="app">
+  <div class="left">
+  <input type="text" id="attr1" name="attr1" v-model="attr1" placeholder="attr1">
+  <br>
+  <input type="text" id="attr2" name="attr2" v-model="attr2" placeholder="attr2">
+  <br>
+  <input type="text" id="attr3" name="attr3" v-model="attr3" placeholder="attr3">
+  <br>
+  <input type="text" id="attr4" name="attr4" v-model="attr4" placeholder="attr4">
+  <br>
+  <input type="text" id="attr5" name="attr5" v-model="attr5" placeholder="attr5">
+  <br>
+  </div>
+  <div class="right">
+    第1个字段<span v-bind="attr1">attr1</span><br>第2个字段<span v-bind="attr2">attr2</span><br>第3个字段<span v-bind="attr3">attr3</span><br>第4个字段<span v-bind="attr4">attr4</span><br>第5个字段<span v-bind="attr5">attr5</span>
+  </div>
+</div>
+</body>
+</html>
